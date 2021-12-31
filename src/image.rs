@@ -20,8 +20,17 @@ impl Image {
 
     /// Convert image's format
     ///
-    /// If delete if true, the origin image will be deleted.
+    /// If delete if true, the origin image will be deleted. This should be the last step of processing.
     pub fn convert(self, path: &str, delete: bool) -> Result<()> {
         process::convert::execute(self.data.clone(), path, delete)
+    }
+
+    /// Rotate image
+    /// 
+    /// Only whole multiples of 90 degrees are supported.
+    pub fn rotate(mut self, angle: i32) -> Result<Self> {
+        let rotated_image = process::rotate::execute(self.data.clone(), angle)?;
+        self.data = rotated_image;
+        Ok(self)
     }
 }
