@@ -1,7 +1,7 @@
 use crate::process;
 use crate::utils::fs;
 use anyhow::Result;
-use image::DynamicImage;
+use image::{DynamicImage, GenericImageView};
 
 /// A struct for single image and its processing method.
 pub struct Image {
@@ -16,6 +16,14 @@ impl Image {
             path: path.to_string(),
             data: fs::read_image(path)?,
         })
+    }
+
+    pub fn width(&self) -> u32 {
+        self.data.width()
+    }
+
+    pub fn height(&self) -> u32 {
+        self.data.height()
     }
 
     /// Convert image's format
@@ -45,6 +53,13 @@ impl Image {
     pub fn blur(mut self, sigma: f32) -> Result<Self> {
         let image = process::blur::execute(&self.data, sigma)?;
         self.data = image;
+        Ok(self)
+    }
+
+    /// Crop image
+    pub fn crop(mut self, x: u32, y: u32, width: u32, height: u32) -> Result<Self> {
+        let cropped_image = process::crop::execute(&self.data, x, y, width, height)?;
+        self.data = cropped_image;
         Ok(self)
     }
 }
