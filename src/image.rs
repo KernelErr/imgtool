@@ -26,7 +26,7 @@ impl Image {
     }
 
     /// Rotate image
-    /// 
+    ///
     /// Only whole multiples of 90 degrees are supported.
     pub fn rotate(mut self, angle: i32) -> Result<Self> {
         let rotated_image = process::rotate::execute(self.data.clone(), angle)?;
@@ -38,6 +38,13 @@ impl Image {
     pub fn flip(mut self, orientation: &str) -> Result<Self> {
         let flipped_image = process::flip::execute(&self.data, orientation)?;
         self.data = flipped_image;
+        Ok(self)
+    }
+
+    /// Blur image
+    pub fn blur(mut self, sigma: f32) -> Result<Self> {
+        let image = process::blur::execute(&self.data, sigma)?;
+        self.data = image;
         Ok(self)
     }
 }
