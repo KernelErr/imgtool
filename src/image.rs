@@ -33,4 +33,11 @@ impl Image {
         self.data = rotated_image;
         Ok(self)
     }
+
+    /// Flip image
+    pub fn flip(mut self, orientation: &str) -> Result<Self> {
+        let flipped_image = process::flip::execute(&self.data, orientation)?;
+        self.data = flipped_image;
+        Ok(self)
+    }
 }
