@@ -2,8 +2,10 @@ use crate::process;
 use crate::utils::fs;
 use anyhow::Result;
 use image::{DynamicImage, GenericImageView};
+use std::path::PathBuf;
 
 /// A struct for single image and its processing method.
+#[derive(Debug)]
 pub struct Image {
     pub path: String,
     pub data: DynamicImage,
@@ -14,6 +16,13 @@ impl Image {
     pub fn new(path: &str) -> Result<Self> {
         Ok(Self {
             path: path.to_string(),
+            data: fs::read_image(path)?,
+        })
+    }
+
+    pub fn from_pathbuf(path: PathBuf) -> Result<Self> {
+        Ok(Self {
+            path: path.to_str().unwrap().to_string(),
             data: fs::read_image(path)?,
         })
     }

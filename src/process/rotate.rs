@@ -8,7 +8,7 @@ pub fn execute(image: DynamicImage, angle: i32) -> Result<DynamicImage> {
     if angle % 90 != 0 {
         return Err(anyhow!("Only whole multiples of 90 are supported"));
     }
-    
+
     let mut rotating_image = image;
     while angle > 0 {
         if angle / 270 != 0 {
@@ -29,7 +29,6 @@ pub fn execute(image: DynamicImage, angle: i32) -> Result<DynamicImage> {
 #[cfg(test)]
 mod tests {
     use crate::image::Image;
-    use tempfile::tempdir;
 
     #[test]
     fn test_rotate_image() {

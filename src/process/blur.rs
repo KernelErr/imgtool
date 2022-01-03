@@ -15,7 +15,7 @@ mod tests {
     #[test]
     fn test_blur_image() {
         let image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
-        let image = image.blur(5.0).unwrap();
+        let image = image.blur(1.5).unwrap();
         assert!(image.blur(-1.0).is_err());
     }
 }
