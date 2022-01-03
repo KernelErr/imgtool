@@ -35,14 +35,14 @@ mod tests {
 
     #[test]
     fn test_flip_image() {
-        let image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
+        let mut image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
         let origin = image.data.get_pixel(0, 0);
         let (width, height) = image.data.dimensions();
 
-        let image = image.flip("horizontal").unwrap();
+        image.flip("horizontal").unwrap();
         assert_eq!(origin, image.data.get_pixel(width - 1, 0));
 
-        let image = image.flip("vertical").unwrap();
+        image.flip("vertical").unwrap();
         assert_eq!(origin, image.data.get_pixel(width - 1, height - 1));
     }
 }

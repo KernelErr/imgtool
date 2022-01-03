@@ -17,7 +17,7 @@ macro_rules! extract_arg {
 pub struct Cli {
     /// Maximum number of threads
     #[clap(short = 't')]
-    pub thread_numbers: Option<u32>,
+    pub threads: Option<usize>,
 
     /// Directory walk depth
     #[clap(short = 'd')]
@@ -31,7 +31,7 @@ pub struct Cli {
     pub operations: Vec<String>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Operations {
     pub inner: Vec<crate::cli::ops::SupportedOps>,
 }

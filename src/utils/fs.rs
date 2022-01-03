@@ -30,17 +30,15 @@ pub fn get_file_lists(path: &str, depth: Option<usize>) -> Result<Vec<PathBuf>> 
     let depth = depth.unwrap_or(usize::MAX);
 
     let mut files = Vec::new();
-    let glob = match Glob::new(&path) {
+    let glob = match Glob::new(path) {
         Ok(g) => g,
         Err(e) => {
             return Err(anyhow!("{}", e));
         }
     };
 
-    for entry in glob.walk(current_dir()?, depth) {
-        if let Ok(entry) = entry {
-            files.push(entry.path().to_owned());
-        }
+    for entry in glob.walk(current_dir()?, depth).flatten() {
+        files.push(entry.path().to_owned());
     }
 
     Ok(files)

@@ -10,6 +10,10 @@ pub enum SupportedOps {
 }
 
 impl SupportedOps {
+    pub fn is_convert(&self) -> bool {
+        matches!(self, SupportedOps::Convert(_))
+    }
+
     pub fn blur(arg1: &str) -> Result<Self> {
         let blur = Blur {
             sigma: arg1.parse::<f32>()?,
@@ -52,29 +56,29 @@ impl SupportedOps {
 
 #[derive(Debug, Clone)]
 pub struct Blur {
-    sigma: f32,
+    pub sigma: f32,
 }
 
 #[derive(Debug, Clone)]
 pub struct Convert {
-    format: String,
-    delete: bool,
+    pub format: String,
+    pub delete: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct Crop {
-    x: u32,
-    y: u32,
-    width: u32,
-    height: u32,
+    pub x: u32,
+    pub y: u32,
+    pub width: u32,
+    pub height: u32,
 }
 
 #[derive(Debug, Clone)]
 pub struct Flip {
-    orientation: String,
+    pub orientation: String,
 }
 
 #[derive(Debug, Clone)]
 pub struct Rotate {
-    angle: i32,
+    pub angle: i32,
 }

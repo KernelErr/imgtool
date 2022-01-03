@@ -18,8 +18,8 @@ mod tests {
 
     #[test]
     fn test_crop_image() {
-        let image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
-        let image = image.crop(0, 0, 10, 10).unwrap();
+        let mut image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
+        image.crop(0, 0, 10, 10).unwrap();
         assert_eq!(image.width(), 10);
         assert_eq!(image.height(), 10);
     }
