@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 authors = ["LI Rui <me@lirui.tech>"]
 license = "Apache-2.0"
-description = "A simple mage processing tool"
+description = "A simple image processing tool."
 readme = "README.md"
 homepage = "https://github.com/KernelErr/imgtool"
 repository = "https://github.com/KernelErr/imgtool"
@@ -13,10 +13,16 @@ repository = "https://github.com/KernelErr/imgtool"
 
 [dependencies]
 anyhow = "1.0"
+num_cpus = "1.0"
+deadqueue = "0.2.0"
+tokio = { version = "1.15.0", features = ["full"] }
 
 # Image process lib
 image = "0.23"
 webp = { version = "0.2", features = ["img"]}
 
-[dev-dependencies]
-tempfile = "3.2"
+# Cli lib
+clap = { version = "3.0.0", features = ["derive"] }
+wax = "0.3"
+log = "0.4"
+pretty_env_logger = "0.3"
