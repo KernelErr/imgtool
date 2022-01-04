@@ -15,7 +15,7 @@ mod tests {
 
     #[test]
     fn test_tile() {
-        let img = image::open("./tests/images/test_tile.jpg").unwrap();
+        let img = image::open("./tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
 
         let img = execute(img, 1920, 1080).unwrap();
         assert_eq!(img.dimensions(), (1920, 1080));
