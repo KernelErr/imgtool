@@ -3,9 +3,9 @@ use crate::process;
 use crate::utils::fs;
 use anyhow::Result;
 use image::DynamicImage;
-use std::path::Path;
 #[cfg(test)]
 use image::GenericImageView;
+use std::path::Path;
 
 /// A struct for single image and its processing method.
 #[derive(Debug)]
@@ -105,6 +105,13 @@ impl Image {
     /// Tile the image to the specified size.
     pub fn tile(&mut self, width: u32, height: u32) -> Result<()> {
         let image = process::tile::execute(&self.data, width, height)?;
+        self.data = image;
+        Ok(())
+    }
+
+    // Resize image
+    pub fn resize(&mut self, width: u32, height: u32) -> Result<()> {
+        let image = process::resize::execute(&self.data, width, height)?;
         self.data = image;
         Ok(())
     }
