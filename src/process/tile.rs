@@ -1,6 +1,7 @@
 use anyhow::Result;
 use image::{DynamicImage, RgbaImage};
 
+// Tile an image into a new image.
 pub fn execute(image: DynamicImage, width: u32, height: u32) -> Result<DynamicImage> {
     let mut canvas = RgbaImage::new(width, height);
     image::imageops::tile(&mut canvas, &image);
