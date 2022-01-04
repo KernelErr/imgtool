@@ -60,8 +60,8 @@ impl Operations {
                     ops.push(crate::cli::ops::SupportedOps::crop(arg1, arg2, arg3, arg4)?);
                 }
                 "flip" => {
-                    let arg1 = extract_arg!(iter.next(), "flip");
-                    ops.push(crate::cli::ops::SupportedOps::flip(arg1)?);
+                    let op = crate::process::flip::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Flip(op));
                 }
                 "rotate" => {
                     let arg1 = extract_arg!(iter.next(), "rotate");

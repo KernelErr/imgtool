@@ -3,9 +3,9 @@ use crate::process;
 use crate::utils::fs;
 use anyhow::Result;
 use image::DynamicImage;
-use std::path::Path;
 #[cfg(test)]
 use image::GenericImageView;
+use std::path::Path;
 
 /// A struct for single image and its processing method.
 #[derive(Debug)]
@@ -39,7 +39,9 @@ impl Image {
                 self.crop(crop.x, crop.y, crop.width, crop.height)?;
             }
             SupportedOps::Flip(flip) => {
-                self.flip(&flip.orientation)?;
+                if let Some(image) = process::flip::execute(self, flip).unwrap() {
+                    self.data = image;
+                }
             }
             SupportedOps::Rotate(rotate) => {
                 self.rotate(rotate.angle)?;
@@ -77,13 +79,6 @@ impl Image {
     pub fn rotate(&mut self, angle: i32) -> Result<()> {
         let rotated_image = process::rotate::execute(self.data.clone(), angle)?;
         self.data = rotated_image;
-        Ok(())
-    }
-
-    /// Flip image
-    pub fn flip(&mut self, orientation: &str) -> Result<()> {
-        let flipped_image = process::flip::execute(&self.data, orientation)?;
-        self.data = flipped_image;
         Ok(())
     }
 

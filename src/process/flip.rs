@@ -1,29 +1,31 @@
-use anyhow::Result;
+use crate::define_operation;
+use crate::image::Image;
+use anyhow::{anyhow, Result};
 use image::DynamicImage;
 use std::str::FromStr;
 
-pub fn execute(image: &DynamicImage, orientation: &str) -> Result<DynamicImage> {
-    let orientation = Orientation::from_str(orientation)
-        .expect("Only horizontal/vertical orientation is supported");
-    match orientation {
-        Orientation::Horizontal => Ok(image.fliph()),
-        Orientation::Vertical => Ok(image.flipv()),
-    }
-}
+define_operation!(flip, source, orientation: Orientation, {
+    let flipped_image = match orientation {
+        Orientation::Horizontal => source.data.fliph(),
+        Orientation::Vertical => source.data.flipv(),
+    };
+    Ok(Some(flipped_image))
+});
 
+#[derive(Debug, Clone)]
 pub enum Orientation {
     Horizontal,
     Vertical,
 }
 
 impl FromStr for Orientation {
-    type Err = ();
+    type Err = &'static str;
 
     fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s {
             "horizontal" => Ok(Orientation::Horizontal),
             "vertical" => Ok(Orientation::Vertical),
-            _ => Err(()),
+            _ => Err("Only horizontal/vertical orientation is supported"),
         }
     }
 }
