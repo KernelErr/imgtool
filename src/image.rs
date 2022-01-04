@@ -26,11 +26,19 @@ impl Image {
     }
 
     /// Rotate image
-    /// 
+    ///
     /// Only whole multiples of 90 degrees are supported.
     pub fn rotate(mut self, angle: i32) -> Result<Self> {
         let rotated_image = process::rotate::execute(self.data.clone(), angle)?;
         self.data = rotated_image;
         Ok(self)
+    }
+    ///Tile image
+    ///
+    /// Tile the image to the specified size.
+    pub fn tile(&mut self, width: u32, height: u32) -> Result<()> {
+        let image = process::tile::execute(&self.data, width, height)?;
+        self.data = image;
+        Ok(())
     }
 }
