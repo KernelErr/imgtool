@@ -5,7 +5,7 @@ pub enum SupportedOps {
     Blur(Blur),
     Convert(Convert),
     Crop(Crop),
-    Flip(Flip),
+    Flip(crate::process::flip::OperationArg),
     Rotate(Rotate),
 }
 
@@ -37,13 +37,6 @@ impl SupportedOps {
             height: arg4.parse::<u32>()?,
         };
         Ok(SupportedOps::Crop(crop))
-    }
-
-    pub fn flip(arg1: &str) -> Result<Self> {
-        let flip = Flip {
-            orientation: arg1.to_string(),
-        };
-        Ok(SupportedOps::Flip(flip))
     }
 
     pub fn rotate(arg1: &str) -> Result<Self> {
@@ -81,4 +74,33 @@ pub struct Flip {
 #[derive(Debug, Clone)]
 pub struct Rotate {
     pub angle: i32,
+}
+
+#[macro_export]
+macro_rules! define_operation {
+    ($name:ident, $image:ident $(, $arg_name:ident : $arg_type:ty)*, $code:block) => {
+        pub fn execute(operation_image: &Image, operation_args: OperationArg) -> Result<Option<DynamicImage>> {
+            let OperationArg($($arg_name),*) = operation_args;
+            let $image = operation_image;
+            $code
+        }
+
+        pub fn to_operation (iter: &mut std::slice::Iter<String>) -> Result<OperationArg> {
+            $(
+                let argument = iter.next();
+                if argument == None {
+                    return Err(anyhow!("Missing argument `{}` for `{}` operation", stringify!($arg_name), stringify!($name)));
+                }
+                let $arg_name: $arg_type = FromStr::from_str(argument.unwrap().as_str()).unwrap();
+            )*
+            Ok(OperationArg(
+                $(
+                    $arg_name
+                ),*
+            ))
+        }
+
+        #[derive(Debug, Clone)]
+        pub struct OperationArg($(pub $arg_type),*);
+    };
 }
