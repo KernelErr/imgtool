@@ -3,16 +3,7 @@ pub mod ops;
 use anyhow::{anyhow, Result};
 use clap::Parser;
 
-macro_rules! extract_arg {
-    ($arg:expr, $op:expr) => {
-        match $arg {
-            Some(s) => s,
-            None => return Err(anyhow!("Missing argument for {} operation", $op)),
-        }
-    };
-}
-
-#[derive(Parser)]
+#[derive(Parser, Debug)]
 #[clap(about, version, author)]
 pub struct Cli {
     /// Maximum number of threads
@@ -40,32 +31,33 @@ impl Operations {
     pub fn from_file_list(operations: Vec<String>) -> Result<Operations> {
         let mut ops: Vec<crate::cli::ops::SupportedOps> = Vec::new();
 
-        let mut iter = operations.iter();
+        let operation_str_list = operations.iter().map(|s| s.as_str()).collect::<Vec<_>>();
+        let mut iter = operation_str_list.iter();
         while let Some(operation) = iter.next() {
-            match operation.as_str() {
+            match *operation {
                 "blur" => {
-                    let arg1 = extract_arg!(iter.next(), "blur");
-                    ops.push(crate::cli::ops::SupportedOps::blur(arg1)?);
+                    let op = crate::process::blur::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Blur(op));
                 }
                 "convert" => {
-                    let arg1 = extract_arg!(iter.next(), "convert");
-                    let arg2 = extract_arg!(iter.next(), "convert");
-                    ops.push(crate::cli::ops::SupportedOps::convert(arg1, arg2)?);
+                    let op = crate::process::convert::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Convert(op));
                 }
                 "crop" => {
-                    let arg1 = extract_arg!(iter.next(), "crop");
-                    let arg2 = extract_arg!(iter.next(), "crop");
-                    let arg3 = extract_arg!(iter.next(), "crop");
-                    let arg4 = extract_arg!(iter.next(), "crop");
-                    ops.push(crate::cli::ops::SupportedOps::crop(arg1, arg2, arg3, arg4)?);
+                    let op = crate::process::crop::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Crop(op));
                 }
                 "flip" => {
                     let op = crate::process::flip::to_operation(&mut iter)?;
                     ops.push(crate::cli::ops::SupportedOps::Flip(op));
                 }
                 "rotate" => {
-                    let arg1 = extract_arg!(iter.next(), "rotate");
-                    ops.push(crate::cli::ops::SupportedOps::rotate(arg1)?);
+                    let op = crate::process::rotate::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Rotate(op));
+                }
+                "tile" => {
+                    let op = crate::process::tile::to_operation(&mut iter)?;
+                    ops.push(crate::cli::ops::SupportedOps::Tile(op));
                 }
                 _ => {
                     return Err(anyhow!("Operation not supported: {}", operation));
