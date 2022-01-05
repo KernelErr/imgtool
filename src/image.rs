@@ -42,22 +42,4 @@ impl Image {
 
         Ok(())
     }
-    ///Tile image
-    ///
-    /// Tile the image to the specified size.
-    pub fn tile(&mut self, width: u32, height: u32) -> Result<()> {
-        let image = process::tile::execute(&self.data, width, height)?;
-        self.data = image;
-        Ok(())
-    }
-    /// Unsharp mask image
-    ///
-    /// The sigma and threshold parameters are used to determine how much to blur the image.
-    /// The sigma parameter is the standard deviation of the Gaussian, in pixels.
-    /// The threshold parameter is the threshold, in the range 0 to 255, for the difference between
-    /// the original and the blur image.
-    pub fn unsharpen(&mut self, sigma: f32, threshold: i32) -> Result<()> {
-        self.data = process::unsharpen::execute(&self.data, sigma, threshold);
-        Ok(())
-    }
 }
