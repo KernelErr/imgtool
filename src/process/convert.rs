@@ -26,7 +26,8 @@ mod tests {
     #[test]
     fn test_convert_jpg_webp() {
         let image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
-        let path = Path::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.webp").with_extension("webp");
+        let path =
+            Path::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.webp").with_extension("webp");
         image.convert("webp", false).unwrap();
         assert!(path.exists());
         std::fs::remove_file(path).unwrap();
