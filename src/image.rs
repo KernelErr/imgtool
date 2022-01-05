@@ -95,12 +95,20 @@ impl Image {
         self.data = cropped_image;
         Ok(())
     }
-    ///Tile image
+  
+    /// Tile image
     ///
     /// Tile the image to the specified size.
     pub fn tile(&mut self, width: u32, height: u32) -> Result<()> {
         let image = process::tile::execute(&self.data, width, height)?;
         self.data = image;
+        Ok(())
+    }
+
+    // Generate thumb
+    pub fn thumbnail(&mut self) -> Result<()> {
+        let thumb = process::thumbnail::execute(&self.data)?;
+        self.data = thumb;
         Ok(())
     }
 
