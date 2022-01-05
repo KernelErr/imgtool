@@ -33,15 +33,10 @@ mod tests {
 
     #[test]
     fn test_convert_jpg_webp() {
-        let original_path = "tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg";
-        let image = image::open(original_path).unwrap();
-        let path = Path::new(original_path).with_extension("webp");
-        execute(
-            original_path,
-            &image,
-            OperationArg("webp".to_string(), false),
-        )
-        .unwrap();
+        let image = Image::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
+        let path =
+            Path::new("tests/images/ryan-yao-VURwPtZqyF4-unsplash.webp").with_extension("webp");
+        image.convert("webp", false).unwrap();
         assert!(path.exists());
         std::fs::remove_file(path).unwrap();
     }
