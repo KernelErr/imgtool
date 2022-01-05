@@ -103,4 +103,10 @@ impl Image {
         self.data = image;
         Ok(())
     }
+
+    pub fn thumbnail(&mut self) -> Result<()> {
+        let thumb = process::thumbnail::execute(&self.data)?;
+        self.data = thumb;
+        Ok(())
+    }
 }

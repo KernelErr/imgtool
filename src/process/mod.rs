@@ -4,3 +4,4 @@ pub mod crop;
 pub mod flip;
 pub mod rotate;
 pub mod tile;
+pub mod thumbnail;
