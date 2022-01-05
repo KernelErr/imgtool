@@ -103,4 +103,11 @@ impl Image {
         self.data = image;
         Ok(())
     }
+
+    // Resize image
+    pub fn resize(&mut self, width: u32, height: u32) -> Result<()> {
+        let image = process::resize::execute(&self.data, width, height)?;
+        self.data = image;
+        Ok(())
+    }
 }
