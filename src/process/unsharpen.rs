@@ -15,7 +15,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_unsharpen() {
+    fn test_unsharpen_image() {
         let img = image::open("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
         let img_clone = img.clone();
         let unsharpened_img = execute(&img, OperationArg(1.5, 1)).unwrap().unwrap();

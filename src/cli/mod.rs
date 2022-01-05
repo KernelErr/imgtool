@@ -1,25 +1,93 @@
 pub mod ops;
+pub mod utils;
 
 use anyhow::{anyhow, Result};
-use clap::Parser;
+use clap::{app_from_crate, arg, App, AppSettings, ArgMatches};
 
-#[derive(Parser, Debug)]
-#[clap(about, version, author)]
-pub struct Cli {
-    /// Maximum number of threads
-    #[clap(short = 't')]
-    pub threads: Option<usize>,
+pub struct Cli {}
 
-    /// Directory walk depth
-    #[clap(short = 'd')]
-    pub depth: Option<usize>,
+impl Cli {
+    pub fn matches() -> ArgMatches {
+        let matches = app_from_crate!()
+            .global_setting(AppSettings::PropagateVersion)
+            .global_setting(AppSettings::UseLongFormatForHelpSubcommand)
+            .subcommand(App::new("contributers").about("List contributors"))
+            .subcommand(
+                App::new("blur")
+                    .about("Gaussian blur")
+                    .arg(arg!(-s <Sigma> "Sigma of the Gaussian blur"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("convert")
+                    .about("Convert image format")
+                    .arg(arg!(-f <Format> "Format of the output image"))
+                    .arg(arg!(Delete: -d "Delete original image after conversion"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("crop")
+                    .about("Crop image")
+                    .arg(arg!(-x [X] "X coordinate of the top left corner"))
+                    .arg(arg!(-y [Y] "Y coordinate of the top left corner"))
+                    .arg(arg!(--width <Width> "Width of the output image"))
+                    .arg(arg!(--height <Height> "Height of the output image"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("flip")
+                    .about("Flip image")
+                    .arg(arg!(Horizontal: -h "Horizontal flip"))
+                    .arg(arg!(Vertical: -v "Vertical flip"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("resize")
+                    .about("Resize image")
+                    .arg(arg!(--width <Width> "Width of the output image"))
+                    .arg(arg!(--height <Height> "Height of the output image"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("rotate")
+                    .about("Rotate image")
+                    .arg(arg!(-r <Rotation> "Rotation angle in degrees"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("thumb")
+                    .about("Create thumbnail")
+                    .arg(arg!(--width <Width> "Width of the thumbnail"))
+                    .arg(arg!(--height <Height> "Height of the thumbnail"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("tile")
+                    .about("Tile image")
+                    .arg(arg!(--width <Width> "Width of the output image"))
+                    .arg(arg!(--height <Height> "Height of the output image"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .subcommand(
+                App::new("unsharpen")
+                    .about("Unsharp mask")
+                    .arg(arg!(-s <Sigma> "Amount to blur the image"))
+                    .arg(arg!(-r <Threshold> "How much to sharpen"))
+                    .arg(arg!(<Path> "Path to the image"))
+                    .arg(arg!([Output] "Output path")),
+            )
+            .get_matches();
 
-    /// Image location
-    pub path: String,
-
-    /// Operations to be performed
-    #[clap(last = true)]
-    pub operations: Vec<String>,
+        matches
+    }
 }
 
 #[derive(Debug, Clone)]
