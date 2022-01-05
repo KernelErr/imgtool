@@ -33,7 +33,7 @@ macro_rules! define_operation {
                 if argument == None {
                     return Err(anyhow!("Missing argument `{}` for `{}` operation", stringify!($arg_name), stringify!($name)));
                 }
-                let $arg_name: $arg_type = FromStr::from_str(argument.unwrap())?;
+                let $arg_name: $arg_type = std::str::FromStr::from_str(argument.unwrap())?;
             )*
             Ok(OperationArg(
                 $(

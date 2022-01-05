@@ -1,7 +1,6 @@
 use crate::define_operation;
 use anyhow::{anyhow, Result};
 use image::DynamicImage;
-use std::str::FromStr;
 
 define_operation!(
     #[doc = "Rotate image. Only whole multiples of 90 degrees are supported."]

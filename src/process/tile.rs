@@ -1,7 +1,6 @@
 use crate::define_operation;
 use anyhow::{anyhow, Result};
 use image::{DynamicImage, RgbaImage};
-use std::str::FromStr;
 
 define_operation!(
     #[doc = "Tile an image into a new image."]
