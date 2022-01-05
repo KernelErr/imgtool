@@ -6,3 +6,4 @@ pub mod resize;
 pub mod rotate;
 pub mod thumbnail;
 pub mod tile;
+pub mod unsharpen;

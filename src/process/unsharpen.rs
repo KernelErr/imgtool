@@ -1,8 +1,14 @@
+use crate::define_operation;
+use anyhow::{anyhow, Result};
 use image::DynamicImage;
 
-pub fn execute(image: &DynamicImage, sigma: f32, threshold: i32) -> DynamicImage {
-    image.unsharpen(sigma, threshold)
-}
+define_operation!(
+    #[doc = "Tile an image into a new image."]
+    unsharpen(image),
+    sigma: f32,
+    threshold: i32,
+    { Ok(Some(image.unsharpen(sigma, threshold))) }
+);
 
 #[cfg(test)]
 mod tests {
@@ -10,7 +16,11 @@ mod tests {
 
     #[test]
     fn test_unsharpen() {
-        let image = image::open("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
-        let image = execute(&image, 3.0, 3);
+        let img = image::open("tests/images/ryan-yao-VURwPtZqyF4-unsplash.jpg").unwrap();
+        let img_clone = img.clone();
+        let unsharpened_img = execute(&img, OperationArg(1.5, 1)).unwrap().unwrap();
+
+        assert_eq!(img, img_clone);
+        assert_ne!(img, unsharpened_img);
     }
 }
