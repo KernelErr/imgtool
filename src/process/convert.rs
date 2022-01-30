@@ -1,6 +1,7 @@
 use crate::define_operation;
 use anyhow::{anyhow, Result};
 use image::DynamicImage;
+use std::ffi::OsStr;
 use std::{fs, path::Path};
 
 define_operation!(
@@ -9,16 +10,17 @@ define_operation!(
     format: String,
     delete: bool,
     {
-        let dst_path_buf = Path::new(src_path).with_extension(format);
-        let dst_path = dst_path_buf.to_str().unwrap();
+        let dst_path_buf = Path::new(src_path).with_extension(format.clone());
 
-        if dst_path.ends_with("webp") {
-            let encoder = webp::Encoder::from_image(image).map_err(|err| anyhow!("{}", err))?;
-            let webp = encoder.encode_lossless();
-            fs::write(dst_path, webp.iter())?;
-        } else {
-            image.save(dst_path)?;
-        }
+        match format.as_str() {
+            "webp" => {
+                let encoder = webp::Encoder::from_image(image).map_err(|err| anyhow!("{}", err))?;
+                let webp = encoder.encode_lossless();
+                fs::write(dst_path_buf, webp.iter())?;
+            }
+            _ => image.save(dst_path_buf)?,
+        };
+
         if delete {
             std::fs::remove_file(src_path)?;
         }
