@@ -1,7 +1,7 @@
 use crate::define_operation;
 use anyhow::{anyhow, Result};
 use image::DynamicImage;
-use std::path::Path;
+use std::{fs, path::Path};
 
 define_operation!(
     #[doc = "Convert image's format. If delete if true, the origin image will be deleted. This should be the last step of processing."]
@@ -21,7 +21,7 @@ define_operation!(
         };
 
         if delete {
-            std::fs::remove_file(src_path)?;
+            fs::remove_file(src_path)?;
         }
         Ok(None)
     }
